@@ -66,7 +66,8 @@ def evaluate_solution(param: parameters.EvaluateSolutionParameters):
         messages=[
             {"role": "system", "content": "You are a strict judge. You strictly evaluate the adequacy of the proposed solution to the pinch point on a 100-point scale. You receive a score out of 100 wheather the solution is humorous. And then, you explain why you score these points."},
             {"role": "user", "content":
-             f'''pinch: {param.event}
+             f'''situation: {param.title}
+             pinch: {param.event}
              solution: {param.solution}
              '''}
         ],
@@ -113,7 +114,7 @@ def find_solution(param: parameters.FindSolutionParameters):
              ・使用を決めた所持品と、ピンチの状況から当然存在する物品だけを用いて実行可能な行動であること
              ・ピンチの打開につながる行動が好ましい
              ・ユーモラスな行動であればなお良い
-             ・行動プランは記具体的かつ詳細に書いてください
+             ・行動プランは具体的かつ詳細に、物語仕立てで書いてください
              '''},
             {"role": "user", "content":
              f'''シチュエーション: {param.title}
@@ -138,7 +139,7 @@ def find_solution(param: parameters.FindSolutionParameters):
                     },
                     "solution": {
                         "type": "string",
-                        "description": "行動プランの詳細",
+                        "description": "行動プランを物語仕立てで書く",
                     },
                 },
                 "required": ["items", "solution"]

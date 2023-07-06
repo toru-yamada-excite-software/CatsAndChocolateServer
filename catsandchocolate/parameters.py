@@ -30,12 +30,14 @@ class GenerateEventsParametersSerializer(serializers.Serializer):
 
 
 class EvaluateSolutionParameters(object):
-    def __init__(self, event: str, solution: str):
+    def __init__(self, title: str, event: str, solution: str):
+        self.title = title
         self.event = event
         self.solution = solution
 
 
 class EvaluateSolutionParametersSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=100)
     event = serializers.CharField()
     solution = serializers.CharField()
 
