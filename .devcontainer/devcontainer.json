@@ -1,0 +1,37 @@
+{
+  "name": "devcontainer-python",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
+  "containerEnv": {
+    "TZ": "Asia/Tokyo"
+  },
+  "runArgs": ["--init", "--env-file", ".env"],
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/poetry:2": {}
+  },
+  "postCreateCommand": "/bin/sh ./.devcontainer/postCreateCommand.sh",
+  "mounts": [
+    "source=venv-${devcontainerId},target=${containerWorkspaceFolder}/.venv,type=volume"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "donjayamanne.python-extension-pack",
+        "ms-python.autopep8"
+      ],
+      "settings": {
+        "editor.renderWhitespace": "all",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": true
+        },
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "python.analysis.typeCheckingMode": "basic",
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.autopep8"
+        },
+        "python.formatting.provider": "autopep8"
+      }
+    }
+  }
+}
