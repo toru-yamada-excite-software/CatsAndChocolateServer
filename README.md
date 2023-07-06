@@ -3,7 +3,7 @@
 ## 開発環境構築
 
 1. docker をインストール
-2. VSCode に devContainer をインストールする
+2. VSCode に Remote Development プラグインをインストールする
 3. プロジェクトルートに.env ファイルを作成、 OpenAI の APIKey を書く
 
 ```env
