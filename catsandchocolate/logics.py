@@ -18,8 +18,17 @@ def generate_items(param: parameters.GenerateItemsParameters):
                     "items": {
                         "type": "array",
                         "items": {
-                            "type": "string",
-                            "description": "物品名"
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "number",
+                                    "description": "連番",
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "物品名"
+                                }
+                            }
                         }
                     }
                 },
@@ -36,7 +45,7 @@ def generate_events(param: parameters.GenerateEventsParameters):
         model="gpt-3.5-turbo",
         messages=[
             {"role": "user", "content":
-             f"「{param.title}」に関連するピンチのシチュエーションを{param.count}個生成してください。"}
+             f"「{param.title}」で発生し得るピンチのシチュエーションを{param.count}個生成してください。それぞれに10文字以内の要約を付加してください。"}
         ],
         functions=[{
             "name": "generateEvents",
@@ -47,8 +56,21 @@ def generate_events(param: parameters.GenerateEventsParameters):
                     "events": {
                         "type": "array",
                         "items": {
-                            "type": "string",
-                            "description": "イベント名"
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "number",
+                                    "description": "連番",
+                                },
+                                "summary": {
+                                    "type": "string",
+                                    "description": "ピンチのシチュエーションを10文字以内で要約"
+                                },
+                                "event": {
+                                    "type": "string",
+                                    "description": "ピンチのシチュエーションを具体的に書く"
+                                }
+                            }
                         }
                     }
                 },
@@ -110,8 +132,8 @@ def find_solution(param: parameters.FindSolutionParameters):
              あなたは発想力豊かな発案者です。指示された所持品を、指示された種類の数だけ使用して、あなたならこのピンチをどう切り抜けますか?
              以下の条件に従って行動してください。
              
-             ・指示された所持品の中から、指示された種類の数だけ使用していること。指示された種類の数より使った所持品の種類が多かったり、少なかったりした場合、誰かが死にます。
-             ・使用を決めた所持品と、ピンチの状況から当然存在する物品だけを用いて実行可能な行動であること
+             ・指示された物品の中から、指示された種類の数だけ使用していること。指示された種類の数より使った物品の種類が多かったり、少なかったりした場合、誰かが死にます。
+             ・使用を決めた物品と、ピンチの状況から当然存在する物品だけを用いて実行可能な行動であること
              ・ピンチの打開につながる行動が好ましい
              ・ユーモラスな行動であればなお良い
              ・行動プランは具体的かつ詳細に、物語仕立てで書いてください
@@ -119,8 +141,8 @@ def find_solution(param: parameters.FindSolutionParameters):
             {"role": "user", "content":
              f'''シチュエーション: {param.title}
              ピンチ: {param.event}
-             所持品: {"、".join(param.items)}
-             所持品の中から{param.number_to_use}つだけを用いてください。
+             物品: {"、".join(param.items)}
+             物品の中から{param.number_to_use}つだけを用いてください。
              '''}
         ],
         functions=[{

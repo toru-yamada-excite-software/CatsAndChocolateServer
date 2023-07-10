@@ -22,7 +22,7 @@ from catsandchocolate import logics
 from catsandchocolate import parameters
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    # path("admin/", admin.site.urls),
     path('items', views.common_gateway, {
          "req_serializer": parameters.GenerateItemsParametersSerializer, "logic": logics.generate_items}),
     path('events', views.common_gateway, {
