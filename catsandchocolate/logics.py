@@ -28,7 +28,8 @@ def generate_items(param: parameters.GenerateItemsParameters):
                                     "type": "string",
                                     "description": "物品名"
                                 }
-                            }
+                            },
+                            "required": ["id", "name"]
                         }
                     }
                 },
@@ -70,7 +71,8 @@ def generate_events(param: parameters.GenerateEventsParameters):
                                     "type": "string",
                                     "description": "ピンチのシチュエーションを具体的に書く"
                                 }
-                            }
+                            },
+                            "required": ["id", "summary", "event"]
                         }
                     }
                 },
@@ -164,7 +166,7 @@ def find_solution(param: parameters.FindSolutionParameters):
                         "description": "行動プランを物語仕立てで書く",
                     },
                 },
-                "required": ["items", "solution"]
+                "required": ["used_items", "solution"]
             }
         }],
         function_call={"name": "decidedAction"})
