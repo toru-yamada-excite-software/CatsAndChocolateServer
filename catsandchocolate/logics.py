@@ -22,7 +22,9 @@ def generate_items(param: parameters.GenerateItemsParameters):
                             "description": "物品名"
                         }
                     },
-                    "required": ["id", "name"]
+                    "required": ["id", "name"],
+                    "minItems": param.count,
+                    "maxItems": param.count,
                 }
             }
         },
@@ -72,7 +74,9 @@ def generate_events(param: parameters.GenerateEventsParameters):
                             "description": "ピンチのシチュエーションを具体的に書く"
                         }
                     },
-                    "required": ["id", "summary", "event"]
+                    "required": ["id", "summary", "event"],
+                    "minItems": param.count,
+                    "maxItems": param.count,
                 }
             }
         },
@@ -118,7 +122,7 @@ def evaluate_solution(param: parameters.EvaluateSolutionParameters):
             },
             "tension": {
                 "type": "number",
-                "description": "Quantify whether the tension in the explanation of the reason is positive or negative.",
+                "description": "Quantify whether the tension in the comments on your impression is positive or negative.",
             }
         },
         "required": ["appropriate_score", "humorous_score", "comment", "tension"]
@@ -128,7 +132,11 @@ def evaluate_solution(param: parameters.EvaluateSolutionParameters):
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": "You are a strict judge. You strictly evaluate the adequacy of the proposed solution to the pinch point on a 100-point scale. You also receive a score out of 100 wheather the solution is humorous. And then, you comment your impression of the solution."},
+                    {"role": "system", "content": '''
+                     You are a strict judge.
+                     You strictly evaluate the adequacy of the proposed solution to the pinch point on a 100-point scale.
+                     You also receive a score out of 100 wheather the solution is humorous.
+                     Then, if either adequacy or humor is met, the impression of the solution is commented on favorably, without mentioning whether the other is not met.'''},
                     {"role": "user", "content":
                      f'''situation: {param.title}
                      pinch: {param.event}
@@ -160,6 +168,8 @@ def find_solution(param: parameters.FindSolutionParameters):
                     "description": "使用する物品名"
                 },
                 "description": "行動で使用する物品",
+                "minItems": param.number_to_use,
+                "maxItems": param.number_to_use,
             },
             "solution": {
                 "type": "string",
@@ -174,14 +184,20 @@ def find_solution(param: parameters.FindSolutionParameters):
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": '''
-                    あなたは発想力豊かな発案者です。指示された所持品を、指示された種類の数だけ使用して、あなたならこのピンチをどう切り抜けますか?
-                    以下の条件に従って行動してください。
-                    
+                     A: ピンチを切り抜ける行動プランを出す。ただし行動プランは以下の条件に従うこと。
                     ・指示された物品の中から、指示された種類の数だけ使用していること。指示された種類の数より使った物品の種類が多かったり、少なかったりした場合、誰かが死にます。
                     ・使用を決めた物品と、ピンチの状況から当然存在する物品だけを用いて実行可能な行動であること
                     ・ピンチの打開につながる行動が好ましい
                     ・ユーモラスな行動であればなお良い
                     ・行動プランは具体的かつ詳細に、物語仕立てで書いてください
+                    またBがNGを出した場合、全く新しい別の行動プランを出すこと。
+                    
+                    B: Aの行動プランが以下の条件に従っているかチェックし、「OK」または「NG」を返す。
+                    ・ピンチの状況から当然存在する物品の他には、指定された数の物品しか使用していないこと。
+                    ・ピンチの状況から当然存在する物品と、指示された物品しか使用していないこと。
+                    
+                    BがOKを出すまで、Aは行動プランを出し続けてください。
+                    最終的にBがOKを出した行動プランを出力してください。
                     '''},
                     {"role": "user", "content":
                      f'''シチュエーション: {param.title}
