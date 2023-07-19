@@ -183,7 +183,7 @@ def find_solution(param: parameters.FindSolutionParameters):
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": '''
+                    {"role": "system", "content": f'''
                      A: ピンチを切り抜ける行動プランを出す。ただし行動プランは以下の条件に従うこと。
                     ・指示された物品の中から、指示された種類の数だけ使用していること。指示された種類の数より使った物品の種類が多かったり、少なかったりした場合、誰かが死にます。
                     ・使用を決めた物品と、ピンチの状況から当然存在する物品だけを用いて実行可能な行動であること
@@ -192,9 +192,9 @@ def find_solution(param: parameters.FindSolutionParameters):
                     ・行動プランは具体的かつ詳細に、物語仕立てで書いてください
                     またBがNGを出した場合、全く新しい別の行動プランを出すこと。
                     
-                    B: Aの行動プランが以下の条件に従っているかチェックし、「OK」または「NG」を返す。
-                    ・ピンチの状況から当然存在する物品の他には、指定された数の物品しか使用していないこと。
-                    ・ピンチの状況から当然存在する物品と、指示された物品しか使用していないこと。
+                    B: Aの物語仕立ての行動プランが以下の条件に従っているかチェックし、「OK」または「NG」を返す。
+                    ・指示された物品のうち、{param.number_to_use}つだけ使用していること。
+                    ・ピンチの状況から当然存在する物品と、指示された物品だけ使用していること。
                     
                     BがOKを出すまで、Aは行動プランを出し続けてください。
                     最終的にBがOKを出した行動プランを出力してください。
@@ -208,7 +208,7 @@ def find_solution(param: parameters.FindSolutionParameters):
                 ],
                 functions=[{
                     "name": "decidedAction",
-                    "description": "行動プラン",
+                    "description": "最終的な行動プラン",
                     "parameters": schema
                 }],
                 function_call={"name": "decidedAction"})
