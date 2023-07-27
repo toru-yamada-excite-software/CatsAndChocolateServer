@@ -23,8 +23,8 @@ def generate_items(param: parameters.GenerateItemsParameters):
                         }
                     },
                     "required": ["id", "name"],
-                    "minItems": param.count,
-                    "maxItems": param.count,
+                    "minItems": param.count + param.nonrelated_count,
+                    "maxItems": param.count + param.nonrelated_count,
                 }
             }
         },
@@ -36,11 +36,11 @@ def generate_items(param: parameters.GenerateItemsParameters):
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "user", "content":
-                     f"「{param.title}」から連想される物品を{param.count}個生成してください。"}
+                     f"「{param.title}」から連想される物品を{param.count}個、「{param.title}」と関連性がない物品を{param.nonrelated_count}個生成してください。"}
                 ],
                 functions=[{
                     "name": "generateItems",
-                    "description": "生成した物品を返す",
+                    "description": "生成した物品をすべて返す",
                     "parameters": schema
                 }],
                 function_call={"name": "generateItems"})

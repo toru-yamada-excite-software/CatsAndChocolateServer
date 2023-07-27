@@ -2,14 +2,17 @@ from rest_framework import serializers
 
 
 class GenerateItemsParameters(object):
-    def __init__(self, title: str, count: int):
+    def __init__(self, title: str, count: int, nonrelated_count=0):
         self.title = title
         self.count = count
+        self.nonrelated_count = nonrelated_count
 
 
 class GenerateItemsParametersSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=100)
     count = serializers.IntegerField(min_value=0, max_value=100)
+    nonrelated_count = serializers.IntegerField(
+        min_value=0, max_value=100, allow_null=True, default=0)
 
     def create(self, validated_data):
         return GenerateItemsParameters(**validated_data)
