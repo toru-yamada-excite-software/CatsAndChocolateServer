@@ -23,9 +23,9 @@ def generate_items(param: parameters.GenerateItemsParameters):
                         }
                     },
                     "required": ["id", "name"],
-                    "minItems": param.count + param.nonrelated_count,
-                    "maxItems": param.count + param.nonrelated_count,
-                }
+                },
+                "minItems": param.count + param.nonrelated_count,
+                "maxItems": param.count + param.nonrelated_count,
             }
         },
         "required": ["items"]
@@ -36,7 +36,8 @@ def generate_items(param: parameters.GenerateItemsParameters):
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "user", "content":
-                     f"「{param.title}」から連想される物品を{param.count}個、「{param.title}」と関連性がない物品を{param.nonrelated_count}個生成してください。"}
+                     f'''
+                     「{param.title}」から連想される物品を{param.count}個、「{param.title}」と関連性がない物品を{param.nonrelated_count}個、合わせて{param.count + param.nonrelated_count}個の物品を生成してください。'''}
                 ],
                 functions=[{
                     "name": "generateItems",
@@ -71,13 +72,13 @@ def generate_events(param: parameters.GenerateEventsParameters):
                         },
                         "event": {
                             "type": "string",
-                            "description": "ピンチのシチュエーションを具体的に書く"
+                            "description": "ピンチのシチュエーションを具体的に日本語で書く"
                         }
                     },
                     "required": ["id", "summary", "event"],
-                    "minItems": param.count,
-                    "maxItems": param.count,
-                }
+                },
+                "minItems": param.count,
+                "maxItems": param.count,
             }
         },
         "required": ["events"]
@@ -92,7 +93,7 @@ def generate_events(param: parameters.GenerateEventsParameters):
                 ],
                 functions=[{
                     "name": "generateEvents",
-                    "description": "生成したイベントを返す",
+                    "description": "生成したピンチのシチュエーションを返す",
                     "parameters": schema
                 }],
                 function_call={"name": "generateEvents"})
