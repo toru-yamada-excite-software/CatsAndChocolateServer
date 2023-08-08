@@ -49,7 +49,8 @@ def generate_items(param: parameters.GenerateItemsParameters):
             args = message['function_call']['arguments']
             jsonschema.validate(json.loads(args), schema)
             return args
-        except:
+        except Exception as e:
+            print(e)
             continue
 
 
@@ -101,7 +102,8 @@ def generate_events(param: parameters.GenerateEventsParameters):
             args = message['function_call']['arguments']
             jsonschema.validate(json.loads(args), schema)
             return args
-        except:
+        except Exception as e:
+            print(e)
             continue
 
 
@@ -154,7 +156,8 @@ def evaluate_solution(param: parameters.EvaluateSolutionParameters):
             args = msg['function_call']['arguments']
             jsonschema.validate(json.loads(args), schema)
             return args
-        except:
+        except Exception as e:
+            print(e)
             continue
 
 
@@ -217,5 +220,6 @@ def find_solution(param: parameters.FindSolutionParameters):
             args = message['function_call']['arguments']
             jsonschema.validate(json.loads(args), schema)
             return args
-        except:
+        except Exception as e:
+            print(e)
             continue
