@@ -30,7 +30,7 @@
         "[python]": {
           "editor.defaultFormatter": "ms-python.autopep8"
         },
-        "python.defaultInterpreterPath": "./.venv/bin"
+        "python.defaultInterpreterPath": "./.venv/bin/python"
       }
     }
   }
